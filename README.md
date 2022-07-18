@@ -1,6 +1,6 @@
 # fast Norminette
 > ### Disclaimer
-> This project is currently in development, checkout the DEV branch to learn more
+> This project is currently in development, checkout the `DEV` branch to learn more
 ## Installation
 ```sh
 $> make
