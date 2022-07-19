@@ -1,23 +1,22 @@
 # fast Norminette
 ## Installation
-```sh
-$> make
 ```
-
+make
+```
 ## Usage
 * Runs on the current folder:
 ```
-$> norminette
+norminette
 ```
 * Runs on the given filename(s):
 ```
-$> norminette <filename>.[c/h]
+norminette <filename>.[c/h]
 ```
 * Prevents stopping on various blocking errors:
 ```
-$> norminette -d
+norminette -d
 ```
 * Output all the debug logging:
 ```
-$> norminette -dd
+norminette -dd
 ```
