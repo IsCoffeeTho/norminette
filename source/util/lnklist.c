@@ -6,11 +6,10 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:14:03 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/20 00:41:57 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:06:01 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "norminette.h"
 
 lst	*new_lstitem(char *value)

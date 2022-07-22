@@ -6,7 +6,7 @@
 #    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/18 17:19:23 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/20 01:05:22 by amenadue         ###   ########.fr        #
+#    Updated: 2022/07/21 09:20:47 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,17 +28,27 @@ CC		=	gcc
 CCFLAGS	=	-Wall -Werror -Wextra -I$(INCDIR)
 
 all: 
-	-@printf "Making libft\n"
-	-@$(MAKE) re -s -C libft
-	-@printf "Making norminette\n"
-	-@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libft.a -o $(NAME)
-	-@printf "Installing norminette\n"
+	@printf "Making libft\n"
+	@$(MAKE) re -s -C libft || $(MAKE) -s error
+	@printf "Building norminette\n"
+	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libft.a -o $(NAME) || $(MAKE) -s error
+	@printf "Built norminette\n"
 
 clean:
-	-@$(MAKE) clean -s -C libft
+	@printf "Cleaning objs\n"
+	@$(MAKE) clean -s -C libft
+	@printf "Cleaned objs\n"
 
 fclean: clean
-	-@$(MAKE) fclean -s -C libft
-	-@rm $(NAME)
+	@printf "Full cleansing\n"
+	@$(MAKE) fclean -s -C libft
+	-@rm -f $(NAME) || true
+	@printf "Cleansed\n"
+
+re: fclean all
+
+error:
+	printf "\e[31m\e[1m[ERROR]\e[0m Please report this issue at \e[94m\e[4mhttps://github.com/IsCoffeeTho/norminette/issues\e[0m\n"
+	exit 1
 
 .PHONY: all clean fclean re

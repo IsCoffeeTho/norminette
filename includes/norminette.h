@@ -8,6 +8,8 @@
 # define __new_author__ "amenadue"
 # define __new_author__email__ "amenadue@student.42adel.org.au"
 
+# include "libft.h"
+# include "py_layer.h"
 # include "lexer.h"
 # include "exceptions.h"
 # include "context.h"
@@ -18,10 +20,18 @@ typedef struct s_lst
 	struct s_lst *next;
 } lst;
 
-lst	*new_lstitem(char *value);
-void lst_push(lst **list, lst *item);
-lst	*lst_pop(lst **list);
-void lst_unshift(lst **list, lst *item);
-lst	*lst_shift(lst **list);
+int debug;
+
+lst		*new_lstitem(char *value);
+void	lst_push(lst **list, lst *item);
+lst		*lst_pop(lst **list);
+void	lst_unshift(lst **list, lst *item);
+lst		*lst_shift(lst **list);
+
+void	print_usage(void);
+void	print_help(void);
+void	print_version(void);
+
+lst *getfiles_recursive(char *path);
 
 #endif

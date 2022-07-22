@@ -6,7 +6,7 @@
 #    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/13 17:55:39 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/10 21:42:32 by amenadue         ###   ########.fr        #
+#    Updated: 2022/07/21 00:51:13 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,9 +62,9 @@ CCFLAGS	=	-Wall -Wextra -Werror
 OBJS	= $(SRC:%.c=%.o)
 
 $(NAME):
-	-@$(CC) $(CCFLAGS) -c $(SRC) -I./
-	-@ar -rc ../$(NAME).a $(OBJS)
-	-@printf "made libft.a\n"
+	@$(CC) $(CCFLAGS) -c $(SRC) -I./
+	@ar -rc ../$(NAME).a $(OBJS)
+	-@printf "Made $(NAME).a\n"
 
 all: $(NAME)
 
