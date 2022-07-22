@@ -18,7 +18,11 @@ norminette <filename>.[c/h]
 ```
 norminette -d
 ```
-* Output all the debug logging:
+* Output all the norminette debug logging:
 ```
 norminette -dd
+```
+* Output all the c debug logging:
+```
+norminette -ddd
 ```
