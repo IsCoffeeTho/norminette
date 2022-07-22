@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 01:18:55 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/21 20:53:28 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/23 02:04:51 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,15 @@ lst *getfiles_recursive(char *path)
 	}
 	while ((dir = readdir(directory)) != NULL)
 	{
-		char *file = ft_strdup(dir->d_name);
+		char *file = dir->d_name;
 		char *file_end = file + ft_strlen(file) - 2;
-		if (ft_strncmp(file, ".", 2) && ft_strncmp(file, "..", 3))
+		if (ft_strncmp(file, ".", 1))
 		{
+			if (ft_strncmp(path, ".", 1))
+			{
+				file = ft_strjoin("/", file);
+				file = ft_strjoin(path, file);
+			}
 			if (dir->d_type == DT_DIR)
 				lst_push(&root, getfiles_recursive(file));
 			else if (dir->d_type == DT_REG)

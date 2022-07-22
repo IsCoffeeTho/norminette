@@ -6,7 +6,7 @@
 #    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/18 17:19:23 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/21 09:20:47 by amenadue         ###   ########.fr        #
+#    Updated: 2022/07/23 01:52:05 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC		=	lexer/*.c \
 
 CC		=	gcc
 
-CCFLAGS	=	-Wall -Werror -Wextra -I$(INCDIR)
+CCFLAGS	=	-Wall -Werror -Wextra -I$(INCDIR) -g3
 
 all: 
 	@printf "Making libft\n"

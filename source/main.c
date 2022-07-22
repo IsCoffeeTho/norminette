@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:14:03 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 00:53:42 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/23 02:01:27 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,30 +168,31 @@ int	main(int c, char **v)
 				else if ((fs.st_mode & S_IFMT) == S_IFDIR)
 					lst_push(&targets, getfiles_recursive(arg));
 				else if ((fs.st_mode & S_IFMT) == S_IFREG)
-					lst_push(&targets, new_lstitem(arg));
+					lst_push(&targets, new_lstitem(ft_strdup(arg)));
 			}
 		}
 	}
 
 	while (targets) // foreach target in targets
 	{
-		char *target = lst_shift(&targets)->value;
+		lst *targetitem = lst_shift(&targets);
+		char *target = targetitem->value;
 		char *file_end = target + (ft_strlen(target) - 2);
 
-		if (debug > 2) ft_printf("<cDebug> %s: %s\n", target, file_end);
 		if (ft_strncmp(file_end, ".c", 3) && ft_strncmp(file_end, ".h", 3))
 			ft_printf("Error: %s is not valid C or C header file\n", target);
 		else
 		{
 			int source = content;
-			if (source == -1)
+			if (source < 0)
 			{
+				if (debug > 2) ft_printf("<cDebug> %s\n", target);
 				source = open(target, O_RDONLY);
-				if (source == -1)
-					ft_printf("Error: File could not be read: %d\n", errno);
-				close(source);
+				if (source < 0)
+					ft_printf("Error: File could not be read: \"source = %d\" errno(%d)\n", source, errno);
 			}
+			close(source);
 		}
 	}
-	return (has_err);
+	return (has_err > 0);
 }
