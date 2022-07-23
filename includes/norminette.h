@@ -8,7 +8,12 @@
 # define __new_author__ "amenadue"
 # define __new_author__email__ "amenadue@student.42adel.org.au"
 
+
 # include "libft.h"
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <errno.h>
 # include "lexer.h"
 # include "exceptions.h"
 # include "context.h"
@@ -31,6 +36,7 @@ void	print_usage(void);
 void	print_help(void);
 void	print_version(void);
 
-lst *getfiles_recursive(char *path);
+int		store_tmpfile(char *content);
+lst		*getfiles_recursive(char *path);
 
 #endif

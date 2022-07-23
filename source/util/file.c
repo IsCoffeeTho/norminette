@@ -6,12 +6,30 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 01:18:55 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 02:08:10 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/23 09:44:36 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "norminette.h"
-#include <dirent.h>
+#include <stdio.h>
+#include <unistd.h>
+
+# define TMPFILE_NAME__ "/tmp/norminette"
+
+int store_tmpfile(char *content)
+{
+	remove(TMPFILE_NAME__);
+	int fd = open(TMPFILE_NAME__, O_RDWR | O_CREAT);
+	chmod(TMPFILE_NAME__, S_IRWXU|S_IRWXO|S_IRWXG);
+	if (fd >= 0)
+		write(fd, content, ft_strlen(content));
+	else
+	{
+		ft_printf("Error: there was a problem writing to temporary file.\n");
+		exit(1);
+	}
+	return (fd);
+}
 
 lst *getfiles_recursive(char *path)
 {

@@ -6,14 +6,11 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:14:03 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 02:09:06 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/23 10:12:56 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "norminette.h"
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
 
 typedef struct s_args
 {
@@ -140,12 +137,18 @@ int	main(int c, char **v)
 		else if (args->cfile)
 		{
 			targets = new_lstitem("file.c");
-			content = open(args->cfile, O_RDONLY);
+			if (!ft_strncmp(args->cfile+ft_strlen(args->cfile)-2, ".c", 3))
+				content = open(args->cfile, O_RDONLY);
+			else
+				content = store_tmpfile(args->cfile);
 		}
 		else
 		{
 			targets = new_lstitem("file.h");
-			content = open(args->hfile, O_RDONLY);
+			if (!ft_strncmp(args->hfile+ft_strlen(args->hfile)-2, ".h", 3))
+				content = open(args->hfile, O_RDONLY);
+			else
+				content = store_tmpfile(args->hfile);
 		}
 	}
 	else
@@ -186,11 +189,14 @@ int	main(int c, char **v)
 			int source = content;
 			if (source < 0)
 			{
-				if (debug > 2) ft_printf("<cDebug> %s\n", target);
 				source = open(target, O_RDONLY);
 				if (source < 0)
+				{
 					ft_printf("Error: File could not be read: \"source = %d\" errno(%d)\n", source, errno);
+					exit(0);
+				}
 			}
+			Lexer *lexer = lexer__init__(source);
 			close(source);
 		}
 	}
