@@ -16,17 +16,23 @@ typedef struct s_token_lst
 typedef struct s_lexer
 {
 	int			fd;
-	long		size;
+	size_t		size;
 	char		__char;
-	long		__pos;
-	int			__line_pos;
-	long		__line;
+	int			__slashed;
+	size_t		__pos;
+	size_t		__line_pos;
+	size_t		__line;
 	Token_lst	*tokens;
 	Token_lst	*last_tok;
 }	Lexer;
 
 Token_lst *token__init__(char *type, int *pos, char* value);
+char *token_tostr(Token_lst *token);
+
 Lexer *lexer__init__(int fd);
+char lexer_pop_char(Lexer *this);
+Token_lst *lexer_get_next_token(Lexer *lex);
+Token_lst *lexer_get_tokens(Lexer *lex);
 
 
 #endif
