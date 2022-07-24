@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exceptions.h                                       :+:      :+:    :+:   */
+/*   exceptions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/23 01:02:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 20:15:56 by amenadue         ###   ########.fr       */
+/*   Created: 2022/07/24 20:15:21 by amenadue          #+#    #+#             */
+/*   Updated: 2022/07/24 20:16:51 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXCEPTIONS_H
-# define EXCEPTIONS_H
+#include "norminette.h"
 
-typedef struct py_exception
+exception *Exception(char *name, char* message)
 {
-	char *name;
-	char *message;
-} exception;
-
-exception *Exception(char *name, char* message);
-
-#endif
+	exception *ex = (exception *) ft_calloc(1, sizeof(exception));
+	ex->name = name;
+	ex->message = message;
+}

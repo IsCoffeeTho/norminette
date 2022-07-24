@@ -18,6 +18,8 @@
 # include "exceptions.h"
 # include "context.h"
 
+exception *norm_err = NULL;
+
 typedef struct s_lst
 {
 	char *value;

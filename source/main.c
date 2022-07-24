@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:14:03 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 17:25:37 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/24 20:11:21 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,10 @@ int	main(int c, char **v)
 			}
 			Lexer *lexer = lexer__init__(source);
 			Token_lst *tokens = lexer_get_tokens(lexer);
+			if (norm_err != NULL)
+			{
+				
+			}
 			close(source);
 		}
 	}

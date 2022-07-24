@@ -6,13 +6,18 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 17:23:43 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/24 20:12:59 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "norminette.h"
 
 #define NORM_tabsize 4
+
+void	TokenError(Lexer *this)
+{
+	norm_err = normError("TokenError", );
+}
 
 Lexer *lexer__init__(int fd)
 {
@@ -64,8 +69,34 @@ char lexer_pop_char(Lexer *this)
 Token_lst *lexer_get_next_token(Lexer *lex)
 {
 	Token_lst *token = NULL;
-	while (lex->__char != '\0')
-		;
+	if (lex->__pos == 0)
+		lexer_pop_char(lex);
+	while (lex->__char)
+	{
+		if (lex->__char == '"')
+			lexer_string(lex);
+		else if (lexer_isidentifier(lex))
+			lexer_identifier(lex);
+		else if (lexer_isconstant(lex))
+			lexer_constant(lex);
+		else if (lex->__char == '\'')
+			lexer_char_constant(lex);
+		else if (lex->__char == '#')
+			lexer_preprocessor(lex);
+		else if (lexer_iscomment(lex)) // this will be for both single and multi line
+			lexer_comment(lex);
+		else if (lexer_isop(lex))
+			lexer_operator(lex);
+		else if (lexer_isws(lex))
+			lexer_ws(lex);
+		else if (lexer_isbrackets(lex))
+			lexer_bracket(lex);
+		else
+		{
+			TokenError(lex);
+			return;
+		}
+	}
 	return (token);
 }
 
