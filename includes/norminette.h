@@ -8,7 +8,6 @@
 # define __new_author__ "amenadue"
 # define __new_author__email__ "amenadue@student.42adel.org.au"
 
-
 # include "libft.h"
 # include <sys/stat.h>
 # include <fcntl.h>

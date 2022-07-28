@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exceptions.h                                       :+:      :+:    :+:   */
+/*   libftx.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/23 01:02:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 20:18:47 by amenadue         ###   ########.fr       */
+/*   Created: 2021/09/13 17:51:19 by amenadue          #+#    #+#             */
+/*   Updated: 2022/07/27 02:29:03 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXCEPTIONS_H
-# define EXCEPTIONS_H
+#ifndef LIBFTX_H
+# define LIBFTX_H
 
-typedef struct py_exception
-{
-	char *name;
-	char *message;
-} exception;
+# include "libft.h"
 
-exception *Exception(char *name, char* message);
+char *ft_sfmt(char const *_fmt, ...);
 
 #endif

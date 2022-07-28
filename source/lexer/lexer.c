@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 20:12:59 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/29 07:35:03 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@
 
 void	TokenError(Lexer *this)
 {
-	norm_err = normError("TokenError", );
+	char *str = ft_strjoin("Error: Unrecognixed token line ", ft_itoa(this->__line));
+	char *tmp = str;
+	str = ft_strjoin(str, ", col ");
+	free(tmp);
+	tmp = str;
+	str = ft_strjoin(str, ft_itoa(this->__line_pos));
+	free(tmp);
+	norm_err = Exception("TokenError", str);
 }
 
 Lexer *lexer__init__(int fd)
@@ -66,6 +73,41 @@ char lexer_pop_char(Lexer *this)
 	return (this->__char);
 }
 
+void	lexer_string(Lexer *this)
+{
+	size_t	start;
+	size_t	l;
+	char	*tkn_value;
+	
+	if (this->__char == 'L')
+	{
+		start = this->__pos;
+		lexer_pop_char(this);
+	}
+	if (start)
+		l++;
+	else
+		start = this->__pos;
+	lexer_pop_char(this);
+	while (this->__char)
+	{
+		l++;
+		if (this->__char == '"' && !this->__slashed)
+			break;
+		lexer_pop_char(this);
+	}
+	if (this->__char == '\0')
+	{
+		TokenError(this);
+		return ;
+	}
+	tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
+	lseek(this->fd, start, SEEK_SET);
+	read(this->fd, tkn_value, l);
+	lexer_tokens_append(this, token__init__("STRING", this->__line_pos, this->__line, tkn_value));
+}
+
+
 Token_lst *lexer_get_next_token(Lexer *lex)
 {
 	Token_lst *token = NULL;
@@ -94,7 +136,7 @@ Token_lst *lexer_get_next_token(Lexer *lex)
 		else
 		{
 			TokenError(lex);
-			return;
+			return (NULL);
 		}
 	}
 	return (token);

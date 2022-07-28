@@ -6,13 +6,13 @@
 #    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/13 17:55:39 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/21 00:51:13 by amenadue         ###   ########.fr        #
+#    Updated: 2022/07/26 09:39:14 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Config
 
-NAME	=	libft
+NAME	=	libftx
 
 SRC 	=	ft_strlen.c \
 			ft_memmove.c \
@@ -51,7 +51,8 @@ SRC 	=	ft_strlen.c \
 			ft_printf.c \
 			ft_internal_print_a.c \
 			ft_internal_print_b.c \
-			ft_gnl.c
+			ft_gnl.c \
+			ft_sfmt.c
 
 # EnvVars (Do not touch unless you understand and know what is happening, which you probably do)
 

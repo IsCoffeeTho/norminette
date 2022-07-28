@@ -6,7 +6,7 @@
 #    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/18 17:19:23 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/24 20:17:16 by amenadue         ###   ########.fr        #
+#    Updated: 2022/07/26 09:24:52 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ CC		=	gcc
 CCFLAGS	=	-Wall -Werror -Wextra -I$(INCDIR) -g3
 
 all: 
-	@printf "Making libft\n"
-	@$(MAKE) re -s -C libft || $(MAKE) -s error
+	@printf "Making libftx\n"
+	@$(MAKE) re -s -C libftx || $(MAKE) -s error
 	@printf "Building norminette\n"
 	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libft.a -o $(NAME) || $(MAKE) -s error
 	@printf "Built norminette\n"

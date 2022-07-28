@@ -6,18 +6,18 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/24 20:09:02 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/07/29 07:30:54 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-Token_lst *token__init__(char *type, int *pos, char* value)
+Token_lst *token__init__(char *type, size_t linepos, size_t line, char* value)
 {
 	Token_lst *this = (Token_lst *) ft_calloc(1, sizeof(Token_lst));
 	this->type = type;
-	this->pos[0] = pos[0];
-	this->pos[1] = pos[1];
+	this->linepos = linepos;
+	this->line = line;
 	if (value != NULL)
 	{
 		this->value = value;
