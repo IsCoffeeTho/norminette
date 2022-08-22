@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/22 15:11:49 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:24:09 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ Token_lst *lexer_get_next_token(Lexer *lex)
 	Token_lst *token = NULL;
 	if (lex->__pos == 0)
 		lexer_pop_char(lex);
-	while (lex->__char)
+	while (lexer_peek_char(lex))
 	{
 		if (lexer_peek_char(lex) == '"')
 			lexer_string(lex);
@@ -123,9 +123,9 @@ Token_lst *lexer_get_next_token(Lexer *lex)
 			lexer_identifier(lex);
 		else if (lexer_isconstant(lex))
 			lexer_constant(lex);
-		else if (lex->__char == '\'')
+		else if (lexer_peek_char(lex) == '\'')
 			lexer_char_constant(lex);
-		else if (lex->__char == '#')
+		else if (lexer_peek_char(lex) == '#')
 			lexer_preprocessor(lex);
 		else if (lexer_iscomment(lex)) // this will be for both single and multi line
 			lexer_comment(lex);
@@ -149,4 +149,9 @@ Token_lst *lexer_get_tokens(Lexer *lex)
 	while (lexer_get_next_token(lex))
 		continue;
 	return (lex->tokens);
+}
+
+void	lexer_print_tokens(Lexer *lex)
+{
+	if (lex->tokens)
 }

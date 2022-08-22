@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
+/*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:47:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/29 07:30:25 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:24:17 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_token_lst
 	char *value;
 	unsigned int length;
 	struct s_token_lst	*next;
-} Token_lst;
+}	Token_lst;
 
 typedef struct s_lexer
 {
@@ -38,14 +38,16 @@ typedef struct s_lexer
 	Token_lst	*last_tok;
 }	Lexer;
 
-Token_lst *token__init__(char *type, size_t linepos, size_t line, char* value);
-char *token_tostr(Token_lst *token);
+Token_lst	*token__init__(char *type, size_t linepos, size_t line, char* value);
+char		*token_tostr(Token_lst *token);
 
-Lexer *lexer__init__(int fd);
-char lexer_pop_char(Lexer *this);
-Token_lst *lexer_get_next_token(Lexer *lex);
-Token_lst *lexer_get_tokens(Lexer *lex);
-void	lexer_tokens_append(Lexer *lex, Token_lst *tok);
+Lexer		*lexer__init__(int fd);
+char		lexer_pop_char(Lexer *this);
+void		lexer_tokens_append(Lexer *lex, Token_lst *tok);
+
+Token_lst	*lexer_get_next_token(Lexer *lex);
+Token_lst	*lexer_get_tokens(Lexer *lex);
+void		lexer_print_tokens(Lexer *lex);
 
 
 #endif
