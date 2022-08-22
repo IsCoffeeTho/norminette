@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
+/*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/29 07:35:03 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:11:49 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "norminette.h"
 
 #define NORM_tabsize 4
+
+#define lexer_peek_char(lexerstruct) lexerstruct->__char
 
 void	TokenError(Lexer *this)
 {
@@ -79,7 +81,7 @@ void	lexer_string(Lexer *this)
 	size_t	l;
 	char	*tkn_value;
 	
-	if (this->__char == 'L')
+	if (lexer_peek_char(this) == 'L')
 	{
 		start = this->__pos;
 		lexer_pop_char(this);
@@ -89,14 +91,14 @@ void	lexer_string(Lexer *this)
 	else
 		start = this->__pos;
 	lexer_pop_char(this);
-	while (this->__char)
+	while (lexer_peek_char(this))
 	{
 		l++;
-		if (this->__char == '"' && !this->__slashed)
+		if (lexer_peek_char(this) == '"' && !this->__slashed)
 			break;
 		lexer_pop_char(this);
 	}
-	if (this->__char == '\0')
+	if (lexer_peek_char(this) == '\0')
 	{
 		TokenError(this);
 		return ;
@@ -115,7 +117,7 @@ Token_lst *lexer_get_next_token(Lexer *lex)
 		lexer_pop_char(lex);
 	while (lex->__char)
 	{
-		if (lex->__char == '"')
+		if (lexer_peek_char(lex) == '"')
 			lexer_string(lex);
 		else if (lexer_isidentifier(lex))
 			lexer_identifier(lex);
