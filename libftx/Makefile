@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
+#    By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/13 17:55:39 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/26 09:39:14 by amenadue         ###   ########.fr        #
+#    Updated: 2022/08/23 14:48:51 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ OBJS	= $(SRC:%.c=%.o)
 
 $(NAME):
 	@$(CC) $(CCFLAGS) -c $(SRC) -I./
-	@ar -rc ../$(NAME).a $(OBJS)
+	@ar -rc $(NAME).a $(OBJS)
 	-@printf "Made $(NAME).a\n"
 
 all: $(NAME)
@@ -73,7 +73,7 @@ clean:
 	-@rm -f $(OBJS)
 
 fclean: clean
-	-@rm -f ../$(NAME).a
+	-@rm -f $(NAME).a
 
 re: fclean all
 

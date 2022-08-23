@@ -6,15 +6,13 @@
 /*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/22 15:24:09 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/23 14:57:17 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "norminette.h"
 
 #define NORM_tabsize 4
-
-#define lexer_peek_char(lexerstruct) lexerstruct->__char
 
 void	TokenError(Lexer *this)
 {
@@ -28,7 +26,7 @@ void	TokenError(Lexer *this)
 	norm_err = Exception("TokenError", str);
 }
 
-Lexer *lexer__init__(int fd)
+Lexer	*lexer__init__(int fd)
 {
 	Lexer *this = (Lexer *) ft_calloc(1, sizeof(Lexer));
 	this->fd = fd;
@@ -43,7 +41,25 @@ Lexer *lexer__init__(int fd)
 	return (this);
 }
 
-char lexer_pop_char(Lexer *this)
+char	*lexer_peek_char_substring(Lexer *this, int size)
+{
+	size_t	curr_pos = this->__pos;
+	size_t	curr_line_pos = this->__line_pos;
+	size_t	curr_line = this->__line;
+	char 	*str = (char *) ft_calloc(size+1, sizeof(char));
+	int		i = 0;
+
+	while (i < size)
+		str[i] = lexer_pop_char(this);
+	this->__pos = curr_pos;
+	this->__line_pos = curr_line_pos;
+	this->__line = curr_line;
+	return (str);
+}
+
+#define	lexer_peek_char(lex) lex->__char
+
+char	lexer_pop_char(Lexer *this)
 {
 	char _c;
 	this->__char = '\0';
@@ -60,7 +76,7 @@ char lexer_pop_char(Lexer *this)
 		else
 			this->__char = _c;
 	}
-	
+
 	if (this->__char == '\n')
 	{
 		this->__line_pos = 1;
@@ -74,6 +90,26 @@ char lexer_pop_char(Lexer *this)
 		this->__line_pos++;
 	return (this->__char);
 }
+
+#define	lexer_peek_token(this) this->last_tok
+
+#define lexer_is_string(this) lexer_peek_char(this) == '"'
+
+int	lexer_is_constant(Lexer *this)
+{
+	if (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9')
+		return (1);
+	else if (lexer_peek_char(this) == '.')
+	{
+		if (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9')
+			return (1);
+		else
+			return (0);
+	}
+	return (0);
+}
+
+#define lexer_is_char_constant(this) lexer_peek_char(this) == '\''
 
 void	lexer_string(Lexer *this)
 {
@@ -109,49 +145,80 @@ void	lexer_string(Lexer *this)
 	lexer_tokens_append(this, token__init__("STRING", this->__line_pos, this->__line, tkn_value));
 }
 
-
-Token_lst *lexer_get_next_token(Lexer *lex)
+void	lexer_char_constant(Lexer *this)
 {
-	Token_lst *token = NULL;
-	if (lex->__pos == 0)
-		lexer_pop_char(lex);
-	while (lexer_peek_char(lex))
+	char	*tkn_value = ft_strdup("''''");
+	
+	lexer_pop_char(this);
+	if (this->__slashed)
 	{
-		if (lexer_peek_char(lex) == '"')
-			lexer_string(lex);
-		else if (lexer_isidentifier(lex))
-			lexer_identifier(lex);
-		else if (lexer_isconstant(lex))
-			lexer_constant(lex);
-		else if (lexer_peek_char(lex) == '\'')
-			lexer_char_constant(lex);
-		else if (lexer_peek_char(lex) == '#')
-			lexer_preprocessor(lex);
-		else if (lexer_iscomment(lex)) // this will be for both single and multi line
-			lexer_comment(lex);
-		else if (lexer_isop(lex))
-			lexer_operator(lex);
-		else if (lexer_isws(lex))
-			lexer_ws(lex);
-		else if (lexer_isbrackets(lex))
-			lexer_bracket(lex);
+		tkn_value[1] = '\\';
+		tkn_value[2] = lexer_peek_char(this);
+	}
+	else
+	{
+		tkn_value[1] = lexer_peek_char(this);
+		tkn_value[3] = '\0';
+	}
+	lexer_pop_char(this);
+	if (lexer_peek_char(this) != '\'')
+	{
+		TokenError(this);
+		return ;
+	}
+	lexer_tokens_append(this, token__init__("CHAR_CONST", this->__line_pos, this->__line, tkn_value));
+}
+
+void	lexer_constant(Lexer *this)
+{
+	char	*tkn_value;
+	char	*bucket = ft_strdup(".0123456789aAbBcCdDeEfFlLuUxX-+");
+	while (0);
+}
+
+Token_lst	*lexer_get_next_token(Lexer *this)
+{
+	Token_lst	*token = NULL;
+
+	if (this->__pos == 0)
+		lexer_pop_char(this);
+	while (lexer_peek_char(this))
+	{
+		if (lexer_is_string(this))
+			lexer_string(this);
+		else if (lexer_is_identifier(this))
+			lexer_identifier(this);
+		else if (lexer_is_constant(this))
+			lexer_constant(this);
+		else if (lexer_is_char_constant(this))
+			lexer_char_constant(this);
+		else if (lexer_peek_char(this) == '#')
+			lexer_preprocessor(this);
+		else if (lexer_iscomment(this)) // this will be for both single and multi line
+			lexer_comment(this);
+		else if (lexer_isop(this))
+			lexer_operator(this);
+		else if (lexer_isws(this))
+			lexer_ws(this);
+		else if (lexer_isbrackets(this))
+			lexer_bracket(this);
 		else
 		{
-			TokenError(lex);
+			TokenError(this);
 			return (NULL);
 		}
 	}
 	return (token);
 }
 
-Token_lst *lexer_get_tokens(Lexer *lex)
+Token_lst	*lexer_get_tokens(Lexer *this)
 {
-	while (lexer_get_next_token(lex))
+	while (lexer_get_next_token(this))
 		continue;
-	return (lex->tokens);
+	return (this->tokens);
 }
 
-void	lexer_print_tokens(Lexer *lex)
+void	lexer_print_tokens(Lexer *this)
 {
-	if (lex->tokens)
+	//if (this->tokens)
 }

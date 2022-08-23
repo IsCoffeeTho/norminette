@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
+#    By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/18 17:19:23 by amenadue          #+#    #+#              #
-#    Updated: 2022/07/26 09:24:52 by amenadue         ###   ########.fr        #
+#    Updated: 2022/08/23 14:54:59 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,17 +32,17 @@ all:
 	@printf "Making libftx\n"
 	@$(MAKE) re -s -C libftx || $(MAKE) -s error
 	@printf "Building norminette\n"
-	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libft.a -o $(NAME) || $(MAKE) -s error
+	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libftx/libftx.a -o $(NAME) || $(MAKE) -s error
 	@printf "Built norminette\n"
 
 clean:
 	@printf "Cleaning objs\n"
-	@$(MAKE) clean -s -C libft
+	@$(MAKE) clean -s -C libftx
 	@printf "Cleaned objs\n"
 
 fclean: clean
 	@printf "Full cleansing\n"
-	@$(MAKE) fclean -s -C libft
+	@$(MAKE) fclean -s -C libftx
 	-@rm -f $(NAME) || true
 	@printf "Cleansed\n"
 

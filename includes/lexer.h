@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:47:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/22 15:24:17 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/23 14:53:27 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ typedef struct s_lexer
 	int			fd;
 	size_t		size;
 	char		__char;
-	int			__slashed;
 	size_t		__pos;
 	size_t		__line_pos;
 	size_t		__line;
 	Token_lst	*tokens;
 	Token_lst	*last_tok;
+	int			__slashed : 1;
 }	Lexer;
 
 Token_lst	*token__init__(char *type, size_t linepos, size_t line, char* value);
