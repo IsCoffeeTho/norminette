@@ -32,7 +32,6 @@ Lexer	*lexer__init__(int fd)
 	this->fd = fd;
 	this->size = lseek(fd, 0, SEEK_END);
 	this->__char = '\0';
-	this->__slashed = 0;
 	this->__pos = 0;
 	this->__line_pos = 1;
 	this->__line = 1;
@@ -63,18 +62,10 @@ char	lexer_pop_char(Lexer *this)
 {
 	char _c;
 	this->__char = '\0';
-	this->__slashed = 0;
 	this->__pos += read(this->fd, &_c, 1);
 	if (this->__pos < this->size)
 	{
-		if (_c == '\\')
-		{
-			this->__pos += read(this->fd, &_c, 1);
-			this->__char = _c;
-			this->__slashed = 1;
-		}
-		else
-			this->__char = _c;
+		this->__char = _c;
 	}
 
 	if (this->__char == '\n')
@@ -84,8 +75,6 @@ char	lexer_pop_char(Lexer *this)
 	}
 	else if (this->__char == '\t')
 		this->__line_pos += NORM_tabsize - (this->__line_pos % NORM_tabsize);
-	else if (this->__slashed)
-		this->__line_pos += 2;
 	else
 		this->__line_pos++;
 	return (this->__char);
@@ -114,7 +103,7 @@ int	lexer_is_constant(Lexer *this)
 void	lexer_string(Lexer *this)
 {
 	size_t	start;
-	size_t	l;
+	size_t	l = 0;
 	char	*tkn_value;
 	
 	if (lexer_peek_char(this) == 'L')
@@ -130,9 +119,8 @@ void	lexer_string(Lexer *this)
 	while (lexer_peek_char(this))
 	{
 		l++;
-		if (lexer_peek_char(this) == '"' && !this->__slashed)
+		if (lexer_peek_char(this) == '\\' && lexer_pop_char(this) == '"')
 			break;
-		lexer_pop_char(this);
 	}
 	if (lexer_peek_char(this) == '\0')
 	{
@@ -150,10 +138,10 @@ void	lexer_char_constant(Lexer *this)
 	char	*tkn_value = ft_strdup("''''");
 	
 	lexer_pop_char(this);
-	if (this->__slashed)
+	if (lexer_peek_char(this) == '\\')
 	{
 		tkn_value[1] = '\\';
-		tkn_value[2] = lexer_peek_char(this);
+		tkn_value[2] = lexer_pop_char(this);
 	}
 	else
 	{
@@ -172,7 +160,7 @@ void	lexer_char_constant(Lexer *this)
 void	lexer_constant(Lexer *this)
 {
 	char	*tkn_value;
-	char	*bucket = ft_strdup(".0123456789aAbBcCdDeEfFlLuUxX-+");
+	
 	while (0);
 }
 
@@ -220,5 +208,14 @@ Token_lst	*lexer_get_tokens(Lexer *this)
 
 void	lexer_print_tokens(Lexer *this)
 {
-	//if (this->tokens)
+	Token_lst	*last = this->tokens;
+
+	while (last)
+	{
+		ft_printf("%s\n", token_tostr(last));
+		if (last->next)
+			last = last->next;
+		else
+			break;
+	}
 }

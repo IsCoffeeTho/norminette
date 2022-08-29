@@ -35,7 +35,6 @@ typedef struct s_lexer
 	size_t		__line;
 	Token_lst	*tokens;
 	Token_lst	*last_tok;
-	int			__slashed : 1;
 }	Lexer;
 
 Token_lst	*token__init__(char *type, size_t linepos, size_t line, char* value);
