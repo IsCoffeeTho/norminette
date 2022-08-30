@@ -179,14 +179,6 @@ void	lexer_char_constant(Lexer *this)
 	lexer_tokens_append(this, token__init__("CHAR_CONST", this->__line_pos, this->__line, tkn_value));
 }
 
-#define usedDot 0b1
-#define usedExp 0b10
-#define usedNeg 0b100
-#define usedESn 0b1000
-#define usedHex 0b10000
-#define usedBin 0b100000
-#define usedOct 0b1000000
-
 /** Parse a Number Constant in a Lexer struct
  * 
  * Different Execution style from original python repo
@@ -197,10 +189,10 @@ void	lexer_constant(Lexer *this)
 	char	*tkn_value;
 	size_t	start = this->__pos;
 	size_t	l = 0;
-	char	flag = 0;
+	char	negative_flag = 0;
 
 	if (lexer_peek_char(this) == '-')
-		flag |= usedNeg;
+		negative_flag = 1;
 
 	if (lexer_peek_char(this) == '+' || lexer_peek_char(this) == '-')
 	{
@@ -213,14 +205,12 @@ void	lexer_constant(Lexer *this)
 		l++;
 		if (lexer_pop_char(this) == 'b' || lexer_peek_char(this) == 'B')
 		{
-			flag |= usedBin;
 			l++;
 			while (lexer_pop_char(this) == '0' || lexer_peek_char(this) == '1')
 				l++;
 		}
 		else if (lexer_peek_char(this) == 'x' || lexer_peek_char(this) == 'X')
 		{
-			flag |= usedHex;
 			l++;
 			while ((lexer_pop_char(this) >= '0' && lexer_peek_char(this) <= '9')
 				|| (lexer_peek_char(this) >= 'a' && lexer_peek_char(this) <= 'a')
@@ -229,10 +219,14 @@ void	lexer_constant(Lexer *this)
 		}
 		else if (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '7')
 		{
-			flag |= usedOct;
 			l++;
 			while (lexer_pop_char(this) >= '0' && lexer_peek_char(this) <= '7')
 				l++;
+		}
+		else
+		{
+			TokenError(this);
+			return ;
 		}
 	}
 	else if ((lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9') || lexer_peek_char(this) == '.')
@@ -251,6 +245,11 @@ void	lexer_constant(Lexer *this)
 				while (lexer_pop_char(this) >= '0' && lexer_peek_char(this) <= '9')
 					l++;
 			}
+			else
+			{
+				TokenError(this);
+				return ;
+			}
 		}
 		if (lexer_peek_char(this) == 'e' || lexer_peek_char(this) == 'E')
 		{
@@ -263,11 +262,16 @@ void	lexer_constant(Lexer *this)
 				lexer_pop_char(this);
 			}
 		}
+		else
+		{
+			TokenError(this);
+			return ;
+		}
 	}
 
 	if (lexer_peek_char(this) == 'u' || lexer_peek_char(this) == 'U')
 	{
-		if (flag & usedNeg)
+		if (negative_flag)
 		{
 			TokenError(this);
 			return ;
@@ -290,14 +294,7 @@ void	lexer_constant(Lexer *this)
 	read(this->fd, tkn_value, l);
 	lexer_tokens_append(this, token__init__("CONSTANT", this->__line_pos, this->__line, tkn_value));
 }
-
-#undef usedDot
-#undef usedExp
 #undef usedNeg
-#undef usedESn
-#undef usedHex
-#undef usedBin
-#undef usedOct
 
 /** Parse the next token in a Lexer struct */
 Token_lst	*lexer_get_next_token(Lexer *this)
