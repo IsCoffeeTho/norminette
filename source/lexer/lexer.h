@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:47:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/23 14:53:27 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:04:09 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "libft.h"
+# include "libftx.h"
 
 /** Token struct */
 typedef struct s_token_lst

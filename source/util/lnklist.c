@@ -6,11 +6,11 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:14:03 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 02:03:52 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:06:18 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "norminette.h"
+#include "../norminette.h"
 
 lst	*new_lstitem(char *value)
 {

@@ -8,16 +8,22 @@
 # define __new_author__ "amenadue"
 # define __new_author__email__ "amenadue@student.42adel.org.au"
 
-# include "libft.h"
+# include "libftx.h"
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
-# include "lexer.h"
-# include "exceptions.h"
-# include "context.h"
+# include "lexer/lexer.h"
+
+typedef struct py_exception
+{
+	char *name;
+	char *message;
+} exception;
 
 exception *norm_err = NULL;
+
+exception *Exception(char *name, char* message);
 
 typedef struct s_lst
 {

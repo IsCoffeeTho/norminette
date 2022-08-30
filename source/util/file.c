@@ -6,11 +6,11 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 01:18:55 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 09:44:36 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:06:14 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "norminette.h"
+#include "../norminette.h"
 #include <stdio.h>
 #include <unistd.h>
 

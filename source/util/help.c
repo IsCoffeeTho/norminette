@@ -6,11 +6,11 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 03:07:41 by amenadue          #+#    #+#             */
-/*   Updated: 2022/07/23 01:02:19 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:06:13 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "norminette.h"
+#include "../norminette.h"
 
 #define V_STR "%s %s\nAuthor: %s (%s)\nRemade: %s (%s)\n"
 

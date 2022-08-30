@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+         #
+#    By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/18 17:19:23 by amenadue          #+#    #+#              #
-#    Updated: 2022/08/23 14:54:59 by amenadue         ###   ########.fr        #
+#    Updated: 2022/08/30 13:06:49 by amenadue         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,13 +26,13 @@ SRC		=	lexer/*.c \
 
 CC		=	gcc
 
-CCFLAGS	=	-Wall -Werror -Wextra -I$(INCDIR) -g3
+CCFLAGS	=	-Wall -Werror -Wextra -g3
 
 all: 
 	@printf "Making libftx\n"
 	@$(MAKE) re -s -C libftx || $(MAKE) -s error
 	@printf "Building norminette\n"
-	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE) )libftx/libftx.a -o $(NAME) || $(MAKE) -s error
+	@$(CC) $(CCFLAGS) $(foreach CFILE,$(SRC),$(SRCDIR)/$(CFILE)) -I$(SRCDIR) -Ilibftx -Llibftx -lftx -o $(NAME) || $(MAKE) -s error
 	@printf "Built norminette\n"
 
 clean:

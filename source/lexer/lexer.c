@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amenadue <amenadue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/23 14:57:17 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/08/30 13:03:23 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "norminette.h"
+#include "../norminette.h"
 
 #define NORM_tabsize 4
 
@@ -19,7 +19,7 @@
  */
 void	TokenError(Lexer *this)
 {
-	char *str = ft_strjoin("Error: Unrecognixed token line ", ft_itoa(this->__line));
+	char *str = ft_strjoin("Error: Unrecognized token line ", ft_itoa(this->__line));
 	char *tmp = str;
 	str = ft_strjoin(str, ", col ");
 	free(tmp);
@@ -48,7 +48,9 @@ Lexer	*lexer__init__(int fd)
 }
 
 /** Returns at an amount of character in Lexer struct from at the point of position
- * @warning This function is prone to messing with the execution of parsing
+ * 
+ *	WARNING:
+ *	This function is prone to messing with the execution of parsing
  * 	please pop each token by hand and handle each token one by one.
 */
 char	*lexer_peek_char_substring(Lexer *this, int size)
@@ -61,6 +63,8 @@ char	*lexer_peek_char_substring(Lexer *this, int size)
 
 	while (i < size)
 		str[i] = lexer_pop_char(this);
+	lseek(this->fd, curr_pos-1, SEEK_SET);
+	lexer_pop_char(this);
 	this->__pos = curr_pos;
 	this->__line_pos = curr_line_pos;
 	this->__line = curr_line;
@@ -116,6 +120,43 @@ int	lexer_is_constant(Lexer *this)
 
 /** Returns if the Lexer struct is looking at a char constant */
 #define lexer_is_char_constant(this) lexer_peek_char(this) == '\''
+
+/** Returns if the Lexer struct is looking at a comment
+ *	Either:
+ *	- Multiline; or
+ *	- Singleline
+*/
+int	lexer_is_comment(Lexer *this)
+{
+	size_t	curr_pos = this->__pos;
+	size_t	curr_line_pos = this->__line_pos;
+	size_t	curr_line = this->__line;
+
+	if (lexer_peek_char(this) == '/')
+	{
+		char nxt = lexer_pop_char(this);
+		
+		lseek(this->fd, curr_pos-1, SEEK_SET);
+		lexer_pop_char(this);
+		this->__pos = curr_pos;
+		this->__line_pos = curr_line_pos;
+		this->__line = curr_line;
+		
+		if (nxt == '/' || nxt == '*')
+			return (1);
+	}
+	return (0);
+}
+
+/** Returns if the Lexer struct is looking at an identifier */
+int	lexer_is_identifier(Lexer *this)
+{
+	if ((lexer_peek_char(this) >= 'A' && lexer_peek_char(this) <= 'Z')
+	 || (lexer_peek_char(this) >= 'a' && lexer_peek_char(this) <= 'z')
+	 || lexer_peek_char(this) == '_')
+		return (1);
+	return (0);
+}
 
 /** Parse a String Definition in a Lexer struct */
 void	lexer_string(Lexer *this)
@@ -296,6 +337,99 @@ void	lexer_constant(Lexer *this)
 }
 #undef usedNeg
 
+/** Parse a Number Constant in a Lexer struct */
+void	lexer_comment(Lexer *this)
+{
+	char	*tkn_value;
+	size_t	start = this->__pos;
+	size_t	l = 0;
+	
+	if (lexer_peek_char(this) == '/')
+	{
+		l++;
+		if (lexer_pop_char(this) == '/')
+		{
+			l++;
+			while (lexer_pop_char(this))
+			{
+				if (lexer_peek_char(this) == '\n')
+				{
+					tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
+					lseek(this->fd, start, SEEK_SET);
+					read(this->fd, tkn_value, l);
+					lexer_tokens_append(this, token__init__("COMMENT", this->__line_pos, this->__line, tkn_value));
+					return ;
+				}
+				l++;
+			}
+		}
+		else if (lexer_peek_char(this) == '*')
+		{
+			l++;
+			while (lexer_pop_char(this))
+			{
+				l++;
+				if (lexer_peek_char(this) == '*')
+				{
+					l++;
+					if (lexer_pop_char(this) == '/')
+					{
+						tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
+						lseek(this->fd, start, SEEK_SET);
+						read(this->fd, tkn_value, l);
+						lexer_tokens_append(this, token__init__("MULT_COMMENT", this->__line_pos, this->__line, tkn_value));
+						return ;
+					}
+				}
+			}
+		}
+		else
+		{
+			TokenError(this);
+			return ;
+		}
+	}
+	else
+		TokenError(this);
+}
+
+/** Parse an Identifier in a Lexer struct */
+void	lexer_identifier(Lexer *this)
+{
+	char	*tkn_value;
+	size_t	start = this->__pos;
+	size_t	l = 0;
+
+	while (lexer_is_identifier(this)
+		|| (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9'))
+	{
+		if (lexer_pop_char(this) == '\\')
+		{
+			if (lexer_pop_char(this) == '\n')
+				lexer_pop_char(this);
+		}
+		l++;
+	}
+	
+	tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
+	lseek(this->fd, start, SEEK_SET);
+	read(this->fd, tkn_value, l);
+	if (dict_is_in_keywords(tkn_value))
+		lexer_tokens_append(this, token__init__(dict_keyword(tkn_value), this->__line_pos, this->__line, NULL));
+	else
+		lexer_tokens_append(this, token__init__("IDENTIFIER", this->__line_pos, this->__line, tkn_value));
+}
+
+/** Parse an Operator in a Lexer struct */
+void	lexer_operator(Lexer *this)
+{
+	char	*tkn_value;
+	size_t	start = this->__pos;
+	size_t	l = 0;
+	
+	
+}
+
 /** Parse the next token in a Lexer struct */
 Token_lst	*lexer_get_next_token(Lexer *this)
 {
@@ -305,6 +439,9 @@ Token_lst	*lexer_get_next_token(Lexer *this)
 		lexer_pop_char(this);
 	while (lexer_peek_char(this))
 	{
+		if (norm_err)
+			return (NULL);
+
 		if (lexer_is_string(this))
 			lexer_string(this);
 		else if (lexer_is_identifier(this))
