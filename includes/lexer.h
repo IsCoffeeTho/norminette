@@ -15,6 +15,7 @@
 
 # include "libft.h"
 
+/** Token struct */
 typedef struct s_token_lst
 {
 	char *type;
@@ -25,6 +26,7 @@ typedef struct s_token_lst
 	struct s_token_lst	*next;
 }	Token_lst;
 
+/** Lexer struct */
 typedef struct s_lexer
 {
 	int			fd;
