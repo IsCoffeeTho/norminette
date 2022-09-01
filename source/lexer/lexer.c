@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/30 13:03:23 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/09/01 15:16:16 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,22 +393,26 @@ void	lexer_comment(Lexer *this)
 		TokenError(this);
 }
 
-/** Parse an Identifier in a Lexer struct */
+/** Parse an Identifier in a Lexer struct 
+ * 
+ * MY NEED A REWORK
+*/
 void	lexer_identifier(Lexer *this)
 {
 	char	*tkn_value;
 	size_t	start = this->__pos;
 	size_t	l = 0;
 
-	while (lexer_is_identifier(this)
-		|| (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9'))
+	while (lexer_is_identifier(this) || (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9'))
 	{
 		if (lexer_pop_char(this) == '\\')
 		{
 			if (lexer_pop_char(this) == '\n')
 				lexer_pop_char(this);
+			l++;
 		}
 		l++;
+		lexer_pop_char(this);
 	}
 	
 	tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
@@ -427,6 +431,10 @@ void	lexer_operator(Lexer *this)
 	size_t	start = this->__pos;
 	size_t	l = 0;
 	
+	tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
+	lseek(this->fd, start, SEEK_SET);
+	read(this->fd, tkn_value, l);
+	lexer_tokens_append(this, token__init__(dict_operator(tkn_value), this->__line_pos, this->__line, NULL));
 	
 }
 
@@ -452,13 +460,13 @@ Token_lst	*lexer_get_next_token(Lexer *this)
 			lexer_char_constant(this);
 		else if (lexer_peek_char(this) == '#')
 			lexer_preprocessor(this);
-		else if (lexer_iscomment(this))
+		else if (lexer_is_comment(this))
 			lexer_comment(this);
-		else if (lexer_isop(this))
+		else if (lexer_is_op(this))
 			lexer_operator(this);
-		else if (lexer_isws(this))
+		else if (lexer_is_ws(this))
 			lexer_ws(this);
-		else if (lexer_isbrackets(this))
+		else if (lexer_is_brackets(this))
 			lexer_bracket(this);
 		else
 		{

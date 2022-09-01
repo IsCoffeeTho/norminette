@@ -6,14 +6,14 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/24 19:47:05 by amenadue          #+#    #+#             */
-/*   Updated: 2022/08/30 13:04:09 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/09/01 00:24:03 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "libftx.h"
+# include "../norminette.h"
 
 /** Token struct */
 typedef struct s_token_lst

@@ -8,11 +8,12 @@
 # define __new_author__ "amenadue"
 # define __new_author__email__ "amenadue@student.42adel.org.au"
 
-# include "libftx.h"
+# include "../libftx/libftx.h"
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <dirent.h>
 # include <errno.h>
+# include "lexer/dictionary.h"
 # include "lexer/lexer.h"
 
 typedef struct py_exception
