@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 09:57:09 by amenadue          #+#    #+#             */
-/*   Updated: 2022/09/01 15:16:16 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:20:09 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,10 +393,7 @@ void	lexer_comment(Lexer *this)
 		TokenError(this);
 }
 
-/** Parse an Identifier in a Lexer struct 
- * 
- * MY NEED A REWORK
-*/
+/** Parse an Indentifier in a Lexer struct */
 void	lexer_identifier(Lexer *this)
 {
 	char	*tkn_value;
@@ -405,12 +402,6 @@ void	lexer_identifier(Lexer *this)
 
 	while (lexer_is_identifier(this) || (lexer_peek_char(this) >= '0' && lexer_peek_char(this) <= '9'))
 	{
-		if (lexer_pop_char(this) == '\\')
-		{
-			if (lexer_pop_char(this) == '\n')
-				lexer_pop_char(this);
-			l++;
-		}
 		l++;
 		lexer_pop_char(this);
 	}
@@ -418,7 +409,20 @@ void	lexer_identifier(Lexer *this)
 	tkn_value = (char *) ft_calloc(l + 1, sizeof(char));
 	lseek(this->fd, start, SEEK_SET);
 	read(this->fd, tkn_value, l);
-	if (dict_is_in_keywords(tkn_value))
+	start = 0;
+	while (tkn_value[start])
+	{
+		if (tkn_value[start] == '\\')
+		{
+			if (tkn_value[++start] == '\n')
+			{
+				lseek(this->fd, 2, SEEK_CUR);
+				start++;
+			}
+		}
+		read(this->fd, tkn_value + start, 1);
+	}
+	if (dict_is_in_keywords(tkn_value) != -1)
 		lexer_tokens_append(this, token__init__(dict_keyword(tkn_value), this->__line_pos, this->__line, NULL));
 	else
 		lexer_tokens_append(this, token__init__("IDENTIFIER", this->__line_pos, this->__line, tkn_value));

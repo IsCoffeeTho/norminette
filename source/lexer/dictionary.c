@@ -6,7 +6,7 @@
 /*   By: amenadue <amenadue@student.42adel.org.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 13:03:42 by amenadue          #+#    #+#             */
-/*   Updated: 2022/09/01 15:28:41 by amenadue         ###   ########.fr       */
+/*   Updated: 2022/09/02 17:19:07 by amenadue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,13 +185,14 @@ int		dict_is_in_keywords(char *tkn_value)
 	return (-1);
 }
 
+/**  */
 char	*dict_keyword(char *tkn_value)
 {
 	int	index;
 
 	index = dict_is_in_keywords(tkn_value);
 	if (index >= 0)
-		return (toUppercase(ft_strdup(keywords[i])));
+		return (toUppercase(ft_strdup(keywords[index])));
 	else
 		return (toUppercase(tkn_value));
 }
